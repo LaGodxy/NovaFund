@@ -538,45 +538,10 @@ Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** -
 
 ---
 
-## 📞 Contact
-
-### Project Links
-
-- **Website**: [https://novafund.io](https://novafund.io)
-- **Documentation**: [https://docs.novafund.io](https://docs.novafund.io)
-- **GitHub**: [https://github.com/yourusername/novafund](https://github.com/yourusername/novafund)
-
-### Community
-
-- **Discord**: [Join our community](https://discord.gg/novafund)
-- **Twitter**: [@novafund](https://twitter.com/novafund)
-- **Telegram**: [t.me/novafund](https://t.me/novafund)
-- **Email**: hello@novafund.io
-
-### Support
-
-Need help? Reach out through:
-- 💬 Discord community support
-- 📧 Email: support@novafund.io
-- 📖 [Documentation](https://docs.novafund.io)
-- 🐛 [GitHub Issues](https://github.com/yourusername/novafund/issues)
-
----
-
-## 🙏 Acknowledgments
-
-Built with ❤️ by the NovaFund team
-
-Special thanks to:
-- [Stellar Development Foundation](https://stellar.org)
-- [Soroban Community](https://soroban.stellar.org)
-- All our contributors and supporters
-
----
 
 <div align="center">
 
