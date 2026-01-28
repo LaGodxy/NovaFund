@@ -42,15 +42,24 @@ pub struct UserProfile {
     pub verified: bool,
 }
 
-/// Milestone status
 #[contracttype]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-#[repr(u32)]
+#[derive(Clone)]
+pub struct EscrowInfo {
+    pub project_id: u64,
+    pub creator: Address,
+    pub token: Address,
+    pub total_deposited: Amount,
+    pub released_amount: Amount,
+    pub validators: Vec<Address>,
+}
+
+#[contracttype]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum MilestoneStatus {
-    Pending = 0,
-    Submitted = 1,
-    Approved = 2,
-    Rejected = 3,
+    Pending = 0,   // Created, awaiting submission
+    Submitted = 1, // Submitted with proof, awaiting validator votes
+    Approved = 2,  // Approved by majority, funds released
+    Rejected = 3,  // Rejected by majority
 }
 
 /// Milestone structure
@@ -66,18 +75,6 @@ pub struct Milestone {
     pub approval_count: u32,
     pub rejection_count: u32,
     pub created_at: Timestamp,
-}
-
-/// Escrow information
-#[contracttype]
-#[derive(Clone, Debug)]
-pub struct EscrowInfo {
-    pub project_id: u64,
-    pub creator: Address,
-    pub token: Address,
-    pub total_deposited: Amount,
-    pub released_amount: Amount,
-    pub validators: Vec<Address>,
 }
 
 /// Proposal status

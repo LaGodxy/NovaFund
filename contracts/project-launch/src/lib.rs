@@ -50,18 +50,6 @@ pub enum DataKey {
 #[contract]
 pub struct ProjectLaunch;
 
-#[contracterror]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
-#[repr(u32)]
-pub enum ProjectLaunchError {
-    InvalidFundingGoal = 1000,
-    InvalidDeadline = 1001,
-    ProjectNotFound = 1002,
-    ContributionTooLow = 1003,
-    ProjectNotActive = 1004,
-    DeadlinePassed = 1005,
-}
-
 #[contractimpl]
 impl ProjectLaunch {
     /// Initialize the contract with an admin address
@@ -85,11 +73,10 @@ impl ProjectLaunch {
         deadline: u64,
         token: Address,
         metadata_hash: Bytes,
-    ) -> Result<u64, ProjectLaunchError> {
-        creator.require_auth();
+    ) -> Result<u64, Error> {
         // Validate funding goal
         if funding_goal < MIN_FUNDING_GOAL {
-            return Err(ProjectLaunchError::InvalidFundingGoal);
+            return Err(Error::InvalidFundingGoal);
         }
 
         // Validate deadline
@@ -97,11 +84,11 @@ impl ProjectLaunch {
         let duration = deadline.saturating_sub(current_time);
 
         if duration < MIN_PROJECT_DURATION || duration > MAX_PROJECT_DURATION {
-            return Err(ProjectLaunchError::InvalidDeadline);
+            return Err(Error::InvalidDeadline);
         }
 
         if !verify_future_timestamp(&env, deadline) {
-            return Err(ProjectLaunchError::InvalidDeadline);
+            return Err(Error::InvalidDeadline);
         }
 
         // Get next project ID
@@ -148,28 +135,28 @@ impl ProjectLaunch {
         project_id: u64,
         contributor: Address,
         amount: i128,
-    ) -> Result<(), ProjectLaunchError> {
-        contributor.require_auth();
+    ) -> Result<(), Error> {
         // Validate contribution amount
         if amount < MIN_CONTRIBUTION {
-            return Err(ProjectLaunchError::ContributionTooLow);
+            return Err(Error::ContributionTooLow);
         }
+        contributor.require_auth();
 
         // Get project
         let mut project: Project = env
             .storage()
             .instance()
             .get(&(DataKey::Project, project_id))
-            .ok_or(ProjectLaunchError::ProjectNotFound)?;
+            .ok_or(Error::ProjectNotFound)?;
 
         // Validate project status and deadline
         if project.status != ProjectStatus::Active {
-            return Err(ProjectLaunchError::ProjectNotActive);
+            return Err(Error::ProjectNotActive);
         }
 
         let current_time = env.ledger().timestamp();
         if current_time >= project.deadline {
-            return Err(ProjectLaunchError::DeadlinePassed);
+            return Err(Error::DeadlinePassed);
         }
 
         // Update project totals
@@ -205,11 +192,11 @@ impl ProjectLaunch {
     }
 
     /// Get project details
-    pub fn get_project(env: Env, project_id: u64) -> Result<Project, ProjectLaunchError> {
+    pub fn get_project(env: Env, project_id: u64) -> Result<Project, Error> {
         env.storage()
             .instance()
             .get(&(DataKey::Project, project_id))
-            .ok_or(ProjectLaunchError::ProjectNotFound)
+            .ok_or(Error::ProjectNotFound)
     }
 
     /// Get individual contribution amount for a user
@@ -240,17 +227,28 @@ impl ProjectLaunch {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use soroban_sdk::token::StellarAssetClient;
     use soroban_sdk::{
         testutils::{Address as TestAddress, Ledger},
-        Address, Bytes,
+        token, Address, Bytes,
     };
+
+    fn create_token_contract<'a>(
+        e: &'a Env,
+        admin: &Address,
+    ) -> (Address, token::Client<'a>, token::StellarAssetClient<'a>) {
+        let token_id = e.register_stellar_asset_contract_v2(admin.clone());
+        let token = token_id.address();
+        let token_client = token::Client::new(e, &token);
+        let token_admin_client = token::StellarAssetClient::new(e, &token);
+        (token, token_client, token_admin_client)
+    }
 
     #[test]
     fn test_initialize() {
         let env = Env::default();
         let contract_id = env.register_contract(None, ProjectLaunch);
         let client = ProjectLaunchClient::new(&env, &contract_id);
+        env.mock_all_auths();
 
         let admin = Address::generate(&env);
 
@@ -267,6 +265,7 @@ mod tests {
         let env = Env::default();
         let contract_id = env.register_contract(None, ProjectLaunch);
         let client = ProjectLaunchClient::new(&env, &contract_id);
+        env.mock_all_auths();
 
         let admin = Address::generate(&env);
         let creator = Address::generate(&env);
@@ -317,6 +316,8 @@ mod tests {
     #[test]
     fn test_contribute() {
         let env = Env::default();
+        env.mock_all_auths();
+
         let contract_id = env.register_contract(None, ProjectLaunch);
         let client = ProjectLaunchClient::new(&env, &contract_id);
 
@@ -324,16 +325,13 @@ mod tests {
         let creator = Address::generate(&env);
         let contributor = Address::generate(&env);
 
+        // Initialize
+        client.initialize(&admin.clone());
+
         // Register a token contract
-        let token = env.register_stellar_asset_contract(admin.clone());
-        let token_admin = StellarAssetClient::new(&env, &token);
+        let token_admin = Address::generate(&env);
+        let (token, token_client, token_admin_client) = create_token_contract(&env, &token_admin);
         let metadata_hash = Bytes::from_slice(&env, b"QmHash123");
-
-        env.mock_all_auths();
-        client.initialize(&admin);
-
-        // Mint tokens to contributor
-        token_admin.mint(&contributor, &1000000000);
 
         // Create project
         env.ledger().set_timestamp(1000000);
@@ -346,8 +344,18 @@ mod tests {
             &metadata_hash,
         );
 
+        // Mint tokens to contributor
+        env.mock_all_auths();
+        token_admin_client.mint(&contributor, &100_0000000);
+
+        assert_eq!(token_client.balance(&contributor), 100_0000000);
+        assert_eq!(token_client.balance(&client.address), 0);
+
         // Test successful contribution
         client.contribute(&project_id, &contributor, &MIN_CONTRIBUTION);
+
+        assert_eq!(token_client.balance(&contributor), 90_0000000);
+        assert_eq!(token_client.balance(&client.address), 10_0000000);
 
         // Verify contribution amount
         assert_eq!(
