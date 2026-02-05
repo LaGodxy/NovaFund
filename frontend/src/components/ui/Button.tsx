@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const base =
-    "font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "font-semibold rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center";
   const sizes = {
     sm: "px-3 py-1 text-sm",
     md: "px-4 py-2 text-base",
@@ -25,9 +25,12 @@ const Button: React.FC<ButtonProps> = ({
     danger: "bg-red-600 text-white hover:bg-red-500 focus:ring-red-400",
   };
 
+  // Allow custom className to override variants
+  const allClasses = `${base} ${sizes[size]} ${variants[variant]} ${props.className || ''}`;
+
   return (
     <button
-      className={`${base} ${sizes[size]} ${variants[variant]}`}
+      className={allClasses}
       {...props}
     >
       {children}

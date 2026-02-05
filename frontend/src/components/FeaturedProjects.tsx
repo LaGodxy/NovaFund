@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ProjectCard } from "./ProjectCard";
@@ -9,39 +10,39 @@ import { Button } from "./ui";
 const FEATURED_PROJECTS = [
   {
     id: "1",
-    title: "EcoSolar Grid",
-    description: "Bringing renewable energy to underserved communities across Africa",
+    title: "SolarGrid Mesh Network",
+    description: "P2P energy sharing platform utilizing smart meters and Stellar micro-payments.",
     category: "Green Energy" as const,
-    goal: 50000,
-    raised: 32000,
-    backers: 1240,
-    daysLeft: 18,
+    goal: 75000,
+    raised: 15000,
+    backers: 210,
+    daysLeft: 45,
     imageUrl: "",
-    createdAt: "2024-01-01",
+    createdAt: "2024-01-18",
   },
   {
     id: "2",
-    title: "MindFlow App",
-    description: "AI-powered meditation and mental wellness platform for developers",
+    title: "Quantum Ledger Explorer",
+    description: "A next-generation blockchain explorer for high-frequency trading networks on Stellar.",
     category: "Tech" as const,
-    goal: 30000,
-    raised: 28500,
-    backers: 950,
+    goal: 50000,
+    raised: 32500,
+    backers: 124,
     daysLeft: 12,
     imageUrl: "",
-    createdAt: "2024-01-05",
+    createdAt: "2024-01-15",
   },
   {
     id: "3",
-    title: "Urban Art Collective",
-    description: "Street art museum and NFT gallery for emerging artists worldwide",
+    title: "Neon Dreams: VR Art Gallery",
+    description: "An immersive virtual reality space for digital artists to showcase and sell NFT-backed art.",
     category: "Art" as const,
     goal: 25000,
-    raised: 19200,
-    backers: 680,
-    daysLeft: 25,
+    raised: 12000,
+    backers: 89,
+    daysLeft: 20,
     imageUrl: "",
-    createdAt: "2024-01-08",
+    createdAt: "2024-01-20",
   },
 ];
 
@@ -101,13 +102,15 @@ export const FeaturedProjects: React.FC = () => {
                 whileHover={{ x: 5 }}
                 className="lg:flex-shrink-0"
               >
-                <Button
-                  variant="secondary"
-                  className="inline-flex items-center gap-2 group"
-                >
-                  Explore All Projects
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+                <Link href="/explore" className="inline-block">
+                  <Button
+                    variant="secondary"
+                    className="inline-flex items-center gap-2 group"
+                  >
+                    Explore All Projects
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
               </motion.div>
             </div>
           </motion.div>
@@ -144,10 +147,12 @@ export const FeaturedProjects: React.FC = () => {
               Join thousands of community members funding the future. Start with 
               as little as $1 and become part of the investment revolution.
             </p>
-            <Button variant="primary" size="lg" className="inline-flex items-center gap-2">
-              Get Started Now
-              <ArrowRight className="w-5 h-5" />
-            </Button>
+            <Link href="/dashboard" className="inline-block">
+              <Button variant="primary" size="lg" className="inline-flex items-center gap-2">
+                Go to Dashboard
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

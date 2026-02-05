@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Lightbulb, BarChart3, Zap } from "lucide-react";
+import { Lightbulb, BarChart3, Zap, ArrowRight } from "lucide-react";
+import { Button } from "./ui";
 
 const steps = [
   {
@@ -152,26 +154,33 @@ export const HowItWorks: React.FC = () => {
             variants={itemVariants}
             className="mt-16 text-center"
           >
-            <p className="text-sm text-gray-400 mb-4">
-              Ready to start your investment journey?
-            </p>
-            <div className="flex justify-center gap-2">
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{
-                    duration: 2,
-                    delay: i * 0.3,
-                    repeat: Infinity,
-                  }}
-                  className={`h-2 rounded-full ${
-                    i < 2
-                      ? "w-2 bg-purple-400"
-                      : "w-8 bg-gradient-to-r from-purple-400 to-cyan-400"
-                  }`}
-                />
-              ))}
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-400 mb-6">
+                Ready to start your investment journey?
+              </p>
+              <div className="flex justify-center gap-2 mb-6">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{
+                      duration: 2,
+                      delay: i * 0.3,
+                      repeat: Infinity,
+                    }}
+                    className={`h-2 rounded-full ${
+                      i < 2
+                        ? "w-2 bg-purple-400"
+                        : "w-8 bg-gradient-to-r from-purple-400 to-cyan-400"
+                    }`}
+                  />
+                ))}
+              </div>
+              <Link href="/explore" className="inline-block">
+                <Button variant="primary" size="lg" className="px-8 py-4 text-lg font-semibold">
+                  Explore Projects
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </motion.div>

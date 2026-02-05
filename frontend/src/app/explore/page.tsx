@@ -147,7 +147,7 @@ export default function ExplorePage() {
               Discover <span className="text-primary">Impactful</span> Projects
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-white/60">
-              NovaFund-OD is the marketplace for decentralized micro-investments. Explore high-growth opportunities powered by the Stellar network.
+              NovaFund is the marketplace for decentralized micro-investments. Explore high-growth opportunities powered by the Stellar network.
             </p>
           </motion.div>
 

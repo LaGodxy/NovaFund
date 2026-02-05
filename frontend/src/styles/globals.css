@@ -27,6 +27,28 @@
     animation: fadeIn 0.3s ease-in-out;
   }
 
+  .bg-grid-white\/\[0\.02\] {
+    background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .rounded-4xl {
+    border-radius: 2rem;
+  }
+
+  .rounded-5xl {
+    border-radius: 2.5rem;
+  }
+
+  .bg-gradient-to-br {
+    background: radial-gradient(ellipse at top, var(--tw-gradient-stops));
+  }
+
+  .bg-gradient-to-t {
+    background: radial-gradient(ellipse at bottom, var(--tw-gradient-stops));
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -36,5 +58,22 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+  }
+
+  .shadow-\[0_25px_80px_rgba\(2\,6\,23\,0\.65\)\] {
+    box-shadow: 0 25px 80px rgba(2,6,23,0.65);
   }
 }

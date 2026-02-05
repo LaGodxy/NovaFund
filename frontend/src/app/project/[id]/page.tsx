@@ -9,58 +9,58 @@ type ContributionState = "idle" | "loading" | "success" | "error";
 const milestones: Milestone[] = [
   {
     id: "m1",
-    title: "Governance & Compliance Readiness",
+    title: "Project Initialization & Legal Framework",
     description:
-      "Finalize legal counsel, escrow contract, and validator KPIs while aligning the community charter.",
+      "Establish governance protocols, finalize legal structure, and secure initial validator partnerships for compliance.",
     amount: "$280K",
-    due: "Completed Nov 25, 2025",
+    due: "Completed Dec 15, 2025",
     status: "completed",
     progress: 100,
     releaseDetails: "Initial tranche fully released",
   },
   {
     id: "m2",
-    title: "Infrastructure & Edge Integration",
+    title: "Site Preparation & Permits",
     description:
-      "Deploy data relays, integrate the audit nodes, and secure telemetry streams for the Aurora corridor.",
+      "Secure permits for installation sites, complete environmental assessments, and prepare foundation work.",
     amount: "$320K",
-    due: "Completed Dec 12, 2025",
+    due: "Completed Jan 10, 2026",
     status: "completed",
     progress: 100,
-    releaseDetails: "Validators signed off on release",
+    releaseDetails: "Permits secured and construction approved",
   },
   {
     id: "m3",
-    title: "Validator Network Expansion",
+    title: "Solar Panel Installation",
     description:
-      "Bring 12 regional validation nodes online + enable real-time monitoring dashboards.",
+      "Deploy solar panel arrays across identified sites and connect to local grid infrastructure.",
     amount: "$410K",
-    due: "Active — Awaiting telemetry verification",
+    due: "Active — Installation in progress",
     status: "active",
     progress: 68,
-    releaseDetails: "Pending validator votes",
+    releaseDetails: "Phase 1 installations completed",
   },
   {
     id: "m4",
-    title: "Earth-to-Orbit Launch Coordination",
+    title: "Grid Connection & Testing",
     description:
-      "Contract satellite partners, complete orbital handshakes, and onboard insurers for coverage.",
+      "Connect solar installations to power grid, conduct safety testing, and obtain operational certification.",
     amount: "$240K",
-    due: "Est. Feb 2026",
+    due: "Est. Mar 2026",
     status: "locked",
     progress: 34,
-    releaseDetails: "Locked until validator milestone clears",
+    releaseDetails: "Locked until installation milestone clears",
   },
   {
     id: "m5",
-    title: "Community Rewards & Reporting",
+    title: "Operations & Revenue Sharing",
     description:
-      "Publish impact retrospectives, distribute governance tokens, and finalize monitoring dashboards.",
+      "Begin commercial operations, initiate revenue sharing with investors, and establish maintenance protocols.",
     amount: "$150K",
-    due: "Est. Jun 2026",
+    due: "Est. Apr 2026",
     status: "locked",
     progress: 12,
-    releaseDetails: "Dependent on prior deliverables",
+    releaseDetails: "Dependent on grid connection milestone",
   },
 ];
 
@@ -78,25 +78,25 @@ const highlightStats = [
     icon: Sparkles,
   },
   {
-    label: "Validator partners",
-    value: "12 regional nodes",
-    detail: "Decentralized from Toronto to Lagos",
+    label: "Community Impact",
+    value: "5,000 households",
+    detail: "Estimated solar energy access",
     icon: Users,
   },
   {
-    label: "Launch window",
-    value: "Q2 2026",
-    detail: "Phased rollout after validator votes",
-    icon: Clock8,
+    label: "Expected ROI",
+    value: "12-18% annually",
+    detail: "Projected returns after project completion",
+    icon: Sparkles,
   },
 ];
 
 const projectProfile = {
-  name: "Lumen Atlas Data Relay",
-  ticker: "LADR",
-  category: "Climate & Connectivity Infrastructure",
+  name: "Stellar Solar Initiative",
+  ticker: "SSI",
+  category: "Green Energy & Sustainability",
   tagline:
-    "A trust-minimized telemetry relay that connects Earth observation sensors to decentralized insurance pools.",
+    "Empowering communities with decentralized solar energy solutions powered by Stellar micro-transactions.",
 };
 
 export default function ProjectPage({
@@ -167,15 +167,15 @@ export default function ProjectPage({
 
   return (
     <div className="min-h-screen max-w-screen overflow-hidden bg-slate-950 text-white">
-      <div className="mx-auto max-w-6xl md:px-4 py-10">
+      <div className="mx-auto max-w-8xl md:px-4 py-10">
         <div className="rounded-4xl border border-white/5 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-950/80 p-8 shadow-[0_25px_80px_rgba(2,6,23,0.65)]">
           <div className="flex flex-col gap-3 text-sm text-white/60">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-white/50">
-              <ShieldCheck className="h-4 w-4 text-emerald-300" />
+              <ShieldCheck className="h-4 w-4 text-purple-300" />
               <span>Project ID #{params.id}</span>
             </div>
             <h1 className="text-4xl font-semibold text-white sm:text-5xl">
-              {projectProfile.name} <span className="text-emerald-300">({projectProfile.ticker})</span>
+              {projectProfile.name} <span className="text-purple-300">({projectProfile.ticker})</span>
             </h1>
             <p className="max-w-3xl text-lg text-white/70">{projectProfile.tagline}</p>
             <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
@@ -195,7 +195,7 @@ export default function ProjectPage({
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.4em] text-white/50">Released</p>
-              <p className="text-3xl font-semibold text-emerald-300">$620K</p>
+              <p className="text-3xl font-semibold text-purple-300">$620K</p>
               <p className="text-xs text-white/60">4 of 5 tranches approved</p>
             </div>
             <div>
@@ -240,7 +240,7 @@ export default function ProjectPage({
                 </div>
                 <div className="mt-2 h-2 rounded-full bg-white/10">
                   <div
-                    className="h-2 rounded-full bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-200 transition-all"
+                    className="h-2 rounded-full bg-gradient-to-r from-purple-400 via-purple-300 to-purple-200 transition-all"
                     style={{ width: `${fundingProgress}%` }}
                   />
                 </div>
@@ -248,9 +248,9 @@ export default function ProjectPage({
                   <span>Released funds</span>
                   <span>{releaseProgress}%</span>
                 </div>
-                <div className="h-1 rounded-full bg-gradient-to-r from-emerald-300/30 to-slate-600">
+                <div className="h-1 rounded-full bg-gradient-to-r from-purple-300/30 to-slate-600">
                   <div
-                    className="h-1 rounded-full bg-emerald-300"
+                    className="h-1 rounded-full bg-purple-300"
                     style={{ width: `${releaseProgress}%` }}
                   />
                 </div>
@@ -260,7 +260,7 @@ export default function ProjectPage({
             <div className="space-y-4">
               {highlightStats.map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-4 py-3">
-                  <stat.icon className="h-5 w-5 text-emerald-300/90" />
+                  <stat.icon className="h-5 w-5 text-purple-300/90" />
                   <div>
                     <p className="text-xs uppercase tracking-[0.3em] text-white/50">{stat.label}</p>
                     <p className="text-lg font-semibold text-white">{stat.value}</p>
@@ -282,7 +282,7 @@ export default function ProjectPage({
               <button
                 type="button"
                 onClick={openModal}
-                className="w-full rounded-2xl border border-white/20 bg-gradient-to-r from-emerald-500 to-emerald-400  px-4 py-3 text-center text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/40 transition hover:brightness-110"
+                className="w-full rounded-2xl border border-white/20 bg-gradient-to-r from-purple-500 to-purple-400  px-4 py-3 text-center text-sm font-semibold text-slate-950 shadow-lg shadow-purple-500/40 transition hover:brightness-110"
               >
                 Contribute
               </button>
@@ -292,7 +292,7 @@ export default function ProjectPage({
                   — {latestContribution.note}
                 </p>
               )}
-              <p className="text-xs text-emerald-300/90">
+              <p className="text-xs text-purple-300/90">
                 Contributors receive real-time verification receipts before funds are released.
               </p>
             </div>
@@ -336,7 +336,7 @@ export default function ProjectPage({
                   step="0.01"
                   value={contributionAmount}
                   onChange={(event) => setContributionAmount(event.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-base text-white outline-none transition focus:border-emerald-300"
+                  className="mt-2 w-full rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-base text-white outline-none transition focus:border-purple-300"
                 />
               </div>
 
@@ -349,14 +349,14 @@ export default function ProjectPage({
                   placeholder="How would you like your support used?"
                   value={contributionNote}
                   onChange={(event) => setContributionNote(event.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-base text-white outline-none transition focus:border-emerald-300"
+                  className="mt-2 w-full rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-base text-white outline-none transition focus:border-purple-300"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={contributionStatus === "loading"}
-                className="w-full rounded-2xl border border-white/10 bg-gradient-to-r from-emerald-500 to-amber-400 px-4 py-3 text-sm font-semibold text-slate-950 transition disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded-2xl border border-white/10 bg-gradient-to-r from-purple-500 to-amber-400 px-4 py-3 text-sm font-semibold text-slate-950 transition disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {contributionStatus === "loading" ? "Processing…" : "Simulate contribution"}
               </button>
@@ -366,7 +366,7 @@ export default function ProjectPage({
               <p
                 className={`mt-4 text-sm ${
                   contributionStatus === "success"
-                    ? "text-emerald-300"
+                    ? "text-purple-300"
                     : contributionStatus === "error"
                     ? "text-rose-300"
                     : "text-white/60"

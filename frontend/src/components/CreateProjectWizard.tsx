@@ -236,7 +236,7 @@ export default function CreateProjectWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -263,47 +263,47 @@ export default function CreateProjectWizard() {
       </header>
 
       {/* Progress Bar */}
-      <div className="bg-card border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-white/10 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-between relative">
             {STEPS.map((step, index) => (
-              <div key={step.id} className="flex-1 flex items-center">
+              <div key={step.id} className="flex-1 flex items-center relative z-10">
                 <div className="flex flex-col items-center flex-1">
                   {/* Step Circle */}
                   <button
                     type="button"
                     onClick={() => visitedSteps.has(index) && goToStep(index)}
                     disabled={!visitedSteps.has(index)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
+                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-all duration-300 transform ${
                       currentStep === index
-                        ? 'bg-primary text-primary-foreground ring-4 ring-primary/20 shadow-lg'
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white ring-4 ring-purple-500/30 shadow-lg shadow-purple-500/30 scale-110'
                         : isStepComplete(index)
-                        ? 'bg-primary text-primary-foreground shadow-md'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md shadow-green-500/20'
                         : visitedSteps.has(index)
-                        ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer'
-                        : 'bg-muted text-muted-foreground'
-                    }`}
+                        ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white hover:from-slate-500 hover:to-slate-600 cursor-pointer'
+                        : 'bg-slate-800 text-slate-500'
+                    } ${!visitedSteps.has(index) ? 'cursor-not-allowed' : ''}`}
                   >
                     {isStepComplete(index) && currentStep !== index ? (
-                      <Check className="w-5 h-5" />
+                      <Check className="w-6 h-6" />
                     ) : (
                       index + 1
                     )}
                   </button>
                   {/* Step Label */}
-                  <div className="mt-2 text-center">
-                    <p className={`text-sm font-medium ${
-                      currentStep === index ? 'text-foreground' : 'text-muted-foreground'
+                  <div className="mt-3 text-center">
+                    <p className={`text-sm font-bold ${
+                      currentStep === index ? 'text-white' : isStepComplete(index) ? 'text-green-400' : 'text-slate-400'
                     }`}>
                       {step.title}
                     </p>
-                    <p className="text-xs text-muted-foreground hidden sm:block">{step.description}</p>
+                    <p className="text-xs text-slate-500 mt-1 max-w-24 truncate">{step.description}</p>
                   </div>
                 </div>
                 {/* Connector Line */}
                 {index < STEPS.length - 1 && (
-                  <div className={`h-1 flex-1 mx-2 mt-[-2.5rem] rounded-full ${
-                    isStepComplete(index) ? 'bg-primary' : 'bg-border'
+                  <div className={`absolute left-1/2 top-6 h-1 w-full -translate-x-1/2 -z-10 ${
+                    isStepComplete(index) ? 'bg-gradient-to-r from-green-500/50 to-green-500/20' : 'bg-gradient-to-r from-slate-700 to-slate-800'
                   }`} />
                 )}
               </div>
@@ -317,16 +317,16 @@ export default function CreateProjectWizard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form Area */}
           <div className="lg:col-span-2">
-            <div className="bg-card rounded-lg shadow-md border border-border p-6 sm:p-8">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-xl border border-white/10 p-6 sm:p-8 bg-gradient-to-br from-slate-800/30 to-slate-900/50">
               {renderStep()}
 
               {/* Navigation Buttons */}
-              <div className="mt-8 pt-6 border-t border-border flex items-center justify-between gap-4">
+              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between gap-4">
                 <button
                   type="button"
                   onClick={handleBack}
                   disabled={currentStep === 0}
-                  className="flex items-center gap-2 px-5 py-2.5 border border-border text-foreground rounded-md hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-slate-200 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium border border-slate-700 shadow-sm hover:shadow-md"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Back
@@ -336,7 +336,7 @@ export default function CreateProjectWizard() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all font-medium shadow-sm hover:shadow-md"
+                    className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-500 hover:to-indigo-500 transition-all font-medium shadow-lg hover:shadow-xl"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
@@ -346,7 +346,7 @@ export default function CreateProjectWizard() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-8 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-sm hover:shadow-md"
+                    className="flex items-center gap-2 px-8 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-500 hover:to-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl"
                   >
                     {isSubmitting ? (
                       <>

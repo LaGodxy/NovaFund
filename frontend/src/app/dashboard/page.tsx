@@ -5,9 +5,8 @@ import Button from "@/components/ui/Button";
 import InvestmentTable from "@/components/InvestmentTable";
 import PortfolioStats from "@/components/PortfolioStats";
 import PortfolioChart from "@/components/PortfolioChart";
-import EmptyState from "@/components/EmptyState";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import LoadingDashboard from "@/components/LoadingDashboard";
+
 
 // Mock data types
 interface Investment {
@@ -128,26 +127,32 @@ export default function DashboardPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in">
+        <div className="fixed top-20 right-4 z-50 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in backdrop-blur-sm border border-white/20">
           {toastMessage}
         </div>
       )}
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Portfolio Dashboard</h1>
-            <p className="text-muted-foreground mt-2">
-              Track your investments and manage returns
-            </p>
+      <div className="container mx-auto px-4 py-8 pt-16">
+        <div className="mb-10">
+          <div className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-600/20 to-indigo-600/20 text-purple-300 text-sm font-medium mb-4">
+            Investor Dashboard
           </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-4">
+            Portfolio Overview
+          </h1>
+          <p className="text-slate-400 max-w-2xl">
+            Track your investments, monitor returns, and manage your portfolio with real-time insights.
+          </p>
+        </div>
+
+        <div className="mb-8">
           {hasInvestments && (
             <Button
               onClick={() => (window.location.href = "/explore")}
-              variant="secondary"
+              className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 shadow-sm hover:shadow-md"
             >
               Explore More Projects
             </Button>
@@ -176,14 +181,27 @@ export default function DashboardPage() {
             </div>
           </>
         ) : (
-          <EmptyState
-            title="No Investments Yet"
-            description="Start building your portfolio by exploring and investing in impactful projects."
-            actionText="Explore Projects"
-            actionHref="/explore"
-          />
+          <div className="text-center py-16 px-4">
+            <div className="mx-auto max-w-md">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-slate-800 to-slate-900 border border-white/10 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">No Investments Yet</h3>
+              <p className="text-slate-400 mb-8 max-w-sm mx-auto">
+                Start building your portfolio by exploring and investing in impactful projects.
+              </p>
+              <Button
+                onClick={() => (window.location.href = "/explore")}
+                className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500"
+              >
+                Explore Projects
+              </Button>
+            </div>
+          </div>
         )}
       </div>
-    </DashboardLayout>
+    </>
   );
 }

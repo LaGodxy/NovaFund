@@ -1,0 +1,72 @@
+name: Contracts Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'contracts/**'
+      - '.github/workflows/contracts.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'contracts/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust-version: ['1.75', '1.76']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Rust ${{ matrix.rust-version }}
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ matrix.rust-version }}
+        components: rustfmt, clippy
+
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Install Soroban CLI
+      run: |
+        curl -fsSL https://github.com/stellar/soroban-tools/releases/latest/download/soroban-cli-installer.sh | bash
+        export PATH="$HOME/.local/bin:$PATH"
+
+    - name: Setup soroban env
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        soroban version
+
+    - name: Run fmt check
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        cd contracts
+        cargo fmt --check
+
+    - name: Run clippy
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        cd contracts
+        cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Run tests
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        cd contracts
+        cargo test
+
+    - name: Build contracts
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        cd contracts
+        cargo build --release
