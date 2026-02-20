@@ -11,6 +11,8 @@ export interface Project {
   title: string;
   description: string;
   category: "Tech" | "Art" | "Green Energy" | "UX";
+  fundingStage?: string;
+  successProbability?: number;
   goal: number;
   raised: number;
   backers: number;
