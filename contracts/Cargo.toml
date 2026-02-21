@@ -10,6 +10,7 @@ members = [
     "reputation",
     "governance",
     "cross-chain-bridge",
+    "insurance-pool",
     "shared",
 ]
 

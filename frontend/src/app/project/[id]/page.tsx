@@ -112,6 +112,7 @@ export default function ProjectPage({
   const [latestContribution, setLatestContribution] = useState<
     { amount: string; note: string } | null
   >(null);
+  const [insuranceSelected, setInsuranceSelected] = useState(false);
 
   const fundingTarget = 1_400_000;
   const fundsCommitted = 870_000;
@@ -124,6 +125,15 @@ export default function ProjectPage({
     () => milestones.find((milestone) => milestone.status === "active"),
     []
   );
+
+  const estimatedPremium = useMemo(() => {
+    const amount = Number(contributionAmount);
+    if (!contributionAmount || Number.isNaN(amount) || amount <= 0) {
+      return "0.00";
+    }
+    const premiumRate = 0.02;
+    return (amount * premiumRate).toFixed(2);
+  }, [contributionAmount]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -153,7 +163,11 @@ export default function ProjectPage({
       const success = Math.random() > 0.2;
       if (success) {
         setContributionStatus("success");
-        setStatusMessage("Contribution queued. Expect the on-chain release window in 2 minutes.");
+        setStatusMessage(
+          insuranceSelected
+            ? "Contribution and insurance coverage queued. Expect the on-chain release window in 2 minutes."
+            : "Contribution queued. Expect the on-chain release window in 2 minutes.",
+        );
         setLatestContribution({
           amount: `${amount.toFixed(2)} XLM`,
           note: contributionNote || "Community wallet",
@@ -294,6 +308,41 @@ export default function ProjectPage({
               )}
               <p className="text-xs text-purple-300/90">
                 Contributors receive real-time verification receipts before funds are released.
+              </p>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-slate-900 to-slate-950/80 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-purple-300" />
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/60">Insurance pool</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setInsuranceSelected((value) => !value)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                    insuranceSelected
+                      ? "bg-purple-500 text-slate-950"
+                      : "bg-white/5 text-white/70 border border-white/10"
+                  }`}
+                >
+                  {insuranceSelected ? "Enabled" : "Add coverage"}
+                </button>
+              </div>
+              <p className="text-sm text-white/70">
+                Protect your downside with an on-chain insurance pool that pays out if the project
+                fails after funds are released.
+              </p>
+              <p className="text-xs text-white/60">
+                Indicative premium:{" "}
+                <span className="font-semibold text-purple-200">
+                  {estimatedPremium} XLM
+                </span>{" "}
+                for a {contributionAmount} XLM contribution.
+              </p>
+              <p className="text-[11px] text-white/50">
+                Pricing is simulated for now and will be driven by project risk scores and pool
+                utilization once contracts are wired in.
               </p>
             </div>
 

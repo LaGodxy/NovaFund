@@ -5,7 +5,7 @@ use shared::types::{
 use soroban_sdk::{
     testutils::Address as _,
     token::{StellarAssetClient, TokenClient},
-    Address, BytesN, Env, String, Vec,
+    Address, BytesN, Env, String,
 };
 
 fn setup_env() -> (Env, CrossChainBridgeClient<'static>) {

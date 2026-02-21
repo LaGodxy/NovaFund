@@ -1,10 +1,7 @@
 #![no_std]
 
 use shared::{
-    constants::{
-        ESCROW_INITIALIZED, MILESTONE_APPROVAL_THRESHOLD, MILESTONE_APPROVED, MILESTONE_CREATED,
-        MILESTONE_REJECTED, MILESTONE_SUBMITTED, MIN_VALIDATORS,
-    },
+    constants::{MILESTONE_APPROVAL_THRESHOLD, MIN_VALIDATORS},
     errors::Error,
     events::*,
     types::{Amount, EscrowInfo, Hash, Milestone, MilestoneStatus},

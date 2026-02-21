@@ -26,7 +26,7 @@ mod tests {
         (env, creator, token, validator3, validators)
     }
 
-    fn create_client(env: &Env) -> EscrowContractClient {
+    fn create_client(env: &Env) -> EscrowContractClient<'_> {
         EscrowContractClient::new(env, &env.register_contract(None, EscrowContract))
     }
 
@@ -36,7 +36,7 @@ mod tests {
         let client = create_client(&env);
         env.mock_all_auths();
 
-        let result = client.initialize(&1, &creator, &token, &validators);
+        client.initialize(&1, &creator, &token, &validators);
 
         // Verify escrow was created
         let escrow = client.get_escrow(&1);

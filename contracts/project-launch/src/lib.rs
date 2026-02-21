@@ -554,7 +554,7 @@ mod tests {
 
         // Register token
         let token_admin = Address::generate(&env);
-        let (token, token_client, token_admin_client) = create_token_contract(&env, &token_admin);
+        let (token, _token_client, token_admin_client) = create_token_contract(&env, &token_admin);
         let metadata_hash = Bytes::from_slice(&env, b"QmHash123");
 
         // Create project
