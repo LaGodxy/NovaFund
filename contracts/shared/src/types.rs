@@ -235,3 +235,12 @@ pub struct PauseState {
     pub paused_at: u64,
     pub resume_not_before: u64,
 }
+
+/// Pending contract upgrade (time-locked). Used by ProjectLaunch and Escrow.
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct PendingUpgrade {
+    pub wasm_hash: Hash,
+    /// Ledger timestamp before which execute_upgrade will fail
+    pub execute_not_before: u64,
+}

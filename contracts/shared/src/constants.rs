@@ -40,3 +40,6 @@ pub const VOTING_PERIOD: u64 = 604800;
 pub const MIN_APPROVAL_THRESHOLD: u32 = 5100;  // 51% minimum
 pub const MAX_APPROVAL_THRESHOLD: u32 = 10000; // 100% maximum
 pub const RESUME_TIME_DELAY: u64 = 86400; // 24 hours in seconds
+
+/// Minimum delay before a scheduled upgrade can be executed (48 hours)
+pub const UPGRADE_TIME_LOCK_SECS: u64 = 172800; // 48 * 3600
