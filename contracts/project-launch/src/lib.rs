@@ -8,8 +8,15 @@ use shared::{
     constants::{MAX_PROJECT_DURATION, MIN_CONTRIBUTION, MIN_FUNDING_GOAL, MIN_PROJECT_DURATION},
     errors::Error,
     events::{CONTRIBUTION_MADE, PROJECT_CREATED, PROJECT_FAILED, REFUND_ISSUED},
+    types::Jurisdiction,
     utils::verify_future_timestamp,
 };
+
+// Interface for IdentityContract
+#[soroban_sdk::contractclient(name = "IdentityContractClient")]
+pub trait IdentityContractTrait {
+    fn is_verified(env: Env, user: Address, jurisdiction: Jurisdiction) -> bool;
+}
 
 /// Project status enumeration
 #[contracttype]
@@ -47,6 +54,8 @@ pub enum DataKey {
     ContributionAmount = 3,        // (DataKey::ContributionAmount, project_id, contributor) -> i128
     RefundProcessed = 4,           // (DataKey::RefundProcessed, project_id, contributor) -> bool
     ProjectFailureProcessed = 5,   // (DataKey::ProjectFailureProcessed, project_id) -> bool
+    IdentityContract = 6,          // Address of the Identity Verification contract
+    ProjectJurisdictions = 7,      // (DataKey::ProjectJurisdictions, project_id) -> Vec<Jurisdiction>
 }
 
 #[contract]
@@ -67,6 +76,20 @@ impl ProjectLaunch {
         Ok(())
     }
 
+    /// Set the identity verification contract address
+    pub fn set_identity_contract(env: Env, identity_contract: Address) -> Result<(), Error> {
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .ok_or(Error::NotInitialized)?;
+        
+        admin.require_auth();
+        env.storage().instance().set(&DataKey::IdentityContract, &identity_contract);
+        
+        Ok(())
+    }
+
     /// Create a new funding project
     pub fn create_project(
         env: Env,
@@ -75,6 +98,7 @@ impl ProjectLaunch {
         deadline: u64,
         token: Address,
         metadata_hash: Bytes,
+        jurisdictions: Option<soroban_sdk::Vec<Jurisdiction>>,
     ) -> Result<u64, Error> {
         // Validate funding goal
         if funding_goal < MIN_FUNDING_GOAL {
@@ -104,6 +128,12 @@ impl ProjectLaunch {
         env.storage()
             .instance()
             .set(&DataKey::NextProjectId, &next_id);
+
+        if let Some(jurisdictions) = jurisdictions {
+            env.storage()
+                .instance()
+                .set(&(DataKey::ProjectJurisdictions, project_id), &jurisdictions);
+        }
 
         // Create project
         let project = Project {
@@ -159,6 +189,34 @@ impl ProjectLaunch {
         let current_time = env.ledger().timestamp();
         if current_time >= project.deadline {
             return Err(Error::DeadlinePassed);
+        }
+
+        // Verify Identity if required
+        if let Some(jurisdictions) = env
+            .storage()
+            .instance()
+            .get::<_, soroban_sdk::Vec<Jurisdiction>>(&(DataKey::ProjectJurisdictions, project_id))
+        {
+            if let Some(identity_contract) = env
+                .storage()
+                .instance()
+                .get::<_, Address>(&DataKey::IdentityContract)
+            {
+                let identity_client = IdentityContractClient::new(&env, &identity_contract);
+                let mut is_verified = false;
+                for jurisdiction in jurisdictions.iter() {
+                    if identity_client.is_verified(&contributor, &jurisdiction) {
+                        is_verified = true;
+                        break;
+                    }
+                }
+                if !is_verified {
+                    return Err(Error::IdentityNotVerified);
+                }
+            } else {
+                 // If jurisdictions are required but no identity contract is set, fail safe.
+                 return Err(Error::IdentityNotVerified);
+            }
         }
 
         // Update project totals
@@ -413,6 +471,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         assert_eq!(project_id, 0);
@@ -425,6 +484,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
         assert!(result.is_err());
 
@@ -436,6 +496,7 @@ mod tests {
             &too_soon_deadline,
             &token,
             &metadata_hash,
+            &None,
         );
         assert!(result.is_err());
     }
@@ -469,6 +530,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint tokens to contributor
@@ -534,6 +596,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
     }
 
@@ -566,6 +629,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint tokens and contribute less than goal
@@ -625,6 +689,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint tokens and contribute full amount (meets goal)
@@ -672,6 +737,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint tokens and contribute
@@ -731,6 +797,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint and contribute from multiple users
@@ -801,6 +868,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Move past deadline and mark as failed
@@ -841,6 +909,7 @@ mod tests {
             &deadline,
             &token,
             &metadata_hash,
+            &None,
         );
 
         // Mint and contribute

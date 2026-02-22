@@ -42,6 +42,17 @@ pub struct UserProfile {
     pub verified: bool,
 }
 
+/// Regulatory Jurisdiction
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u32)]
+pub enum Jurisdiction {
+    Global = 0,
+    UnitedStates = 1,
+    EuropeanUnion = 2,
+    UnitedKingdom = 3,
+}
+
 #[contracttype]
 #[derive(Clone)]
 pub struct EscrowInfo {

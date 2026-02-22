@@ -11,7 +11,7 @@ members = [
     "governance",
     "cross-chain-bridge",
     "insurance-pool",
-    "shared",
+    "shared", "identity",
 ]
 
 [workspace.package]
